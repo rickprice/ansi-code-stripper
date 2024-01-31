@@ -4,7 +4,7 @@
 
 {- |
 Module      : Main
-Description : Google Takeout Location to KML Converter
+Description : Strip ANSI and other things from "script" output
 Copyright   : (c) 2024 Frederick Price
 License     : BSD-3-Clause
 Maintainer  : fprice@pricemail.ca
@@ -17,33 +17,32 @@ module Main (main) where
 
 import Relude
 
-import qualified Data.Location.GoogleLocation as GL
-import qualified Data.Location.KML as KML
+-- import Data.Void
+import Text.Megaparsec
+import Text.Megaparsec.Char
+import Text.Megaparsec.Char.Lexer
+import Replace.Megaparsec
 
-import Data.Time
-
-import CmdOptions
-
-import qualified Data.Text.Lazy.Builder as B
-import qualified Data.Text.Lazy.IO as BIO
+import Prelude (interact)
 
 main :: IO ()
-main = do
-    -- Get the configuration data from command line parameters
-    configuration <- getConfiguration
-
-    -- Get the location records from the Google Takout file
-    locationList <- GL.getLocationRecordsFromFilePath (inputFilename configuration)
-
-    -- Filter records by date if required
-    now <- getCurrentTime
-    let listToOutput = case filterOlderThanDays configuration of
-            Nothing -> locationList
-            Just x -> GL.filterOlderThan filterDate locationList
-              where
-                filterDate = GL.addDaysUTCTime ((-1) * x) now
-
-    -- Output as KML
-    case outputFilename configuration of
-        Nothing -> BIO.hPutStr stdout (B.toLazyText (KML.toKML listToOutput))
-        Just x -> writeFileLText x (B.toLazyText (KML.toKML listToOutput))
+main = interact $ streamEdit (decimal :: Parsec Void String Int) (show . (*2))
+-- main = do
+--     -- Get the configuration data from command line parameters
+--     configuration <- getConfiguration
+--
+--     -- Get the location records from the Google Takout file
+--     locationList <- GL.getLocationRecordsFromFilePath (inputFilename configuration)
+--
+--     -- Filter records by date if required
+--     now <- getCurrentTime
+--     let listToOutput = case filterOlderThanDays configuration of
+--             Nothing -> locationList
+--             Just x -> GL.filterOlderThan filterDate locationList
+--               where
+--                 filterDate = GL.addDaysUTCTime ((-1) * x) now
+--
+--     -- Output as KML
+--     case outputFilename configuration of
+--         Nothing -> BIO.hPutStr stdout (B.toLazyText (KML.toKML listToOutput))
+--         Just x -> writeFileLText x (B.toLazyText (KML.toKML listToOutput))
