@@ -1,2 +1,13 @@
 cradle:
   stack:
+    - path: "./src"
+      component: "ansi-code-stripper:lib"
+
+    - path: "./app/Main.hs"
+      component: "ansi-code-stripper:exe:fix_script_output"
+
+    - path: "./app/CmdOptions.hs"
+      component: "ansi-code-stripper:exe:fix_script_output"
+
+    - path: "./test"
+      component: "ansi-code-stripper:test:-anside-code-stripper-test"
