@@ -25,8 +25,12 @@ import Replace.Megaparsec
 
 import Prelude (interact)
 
+ftest :: Parsec Void String String
+ftest = chunk "abc" :: Parsec Void String String
+
 main :: IO ()
-main = interact $ streamEdit (decimal :: Parsec Void String Int) (show . (*2))
+-- main = interact $ streamEdit (decimal :: Parsec Void String Int) (show . (*2))
+main = interact $ streamEdit ftest (const "") 
 -- main = do
 --     -- Get the configuration data from command line parameters
 --     configuration <- getConfiguration
