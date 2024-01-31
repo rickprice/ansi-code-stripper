@@ -76,7 +76,7 @@ test-suite -anside-code-stripper-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Internal.PatternsToStrip
+      Internal.PatternsToStripSpec
       Paths_ansi_code_stripper
   autogen-modules:
       Paths_ansi_code_stripper
