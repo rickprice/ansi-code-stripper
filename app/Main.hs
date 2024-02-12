@@ -25,13 +25,16 @@ import Replace.Megaparsec
 
 import Prelude (interact)
 
-csi :: Parsec Void String String
-csi = chunk "\x1b[" :: Parsec Void String String
+-- csi :: ParsecT Void String String
+csi = chunk "\x1b["
 
-cuu :: Parsec Void String String
-cuu = csi <> MT.some digitChar <> chunk "A" :: Parsec Void String String
+cuu :: ParsecT Void String String
+-- cuu = csi <*> MT.some digitChar <*> chunk "A" 
+cuu = chunk "\x1b[" <*> (MT.some digitChar) <*> chunk "A" 
 
-ftest :: Parsec Void String String
+-- test = csi <*> MT.some digitChar <*> oneOf "ABCDEFG"
+
+-- ftest :: ParsecT Void String String
 ftest = cuu
 
 main :: IO ()
