@@ -27,7 +27,7 @@ source-repository head
 
 library
   exposed-modules:
-      Internal.PatternsToStrip
+      Text.Parser.ANSIEscapes
   other-modules:
       Paths_ansi_code_stripper
   autogen-modules:

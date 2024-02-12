@@ -18,15 +18,21 @@ module Main (main) where
 import Relude
 
 -- import Data.Void
-import Text.Megaparsec
+import Text.Megaparsec as MT
 import Text.Megaparsec.Char
 import Text.Megaparsec.Char.Lexer
 import Replace.Megaparsec
 
 import Prelude (interact)
 
+csi :: Parsec Void String String
+csi = chunk "\x1b[" :: Parsec Void String String
+
+cuu :: Parsec Void String String
+cuu = csi <> MT.some digitChar <> chunk "A" :: Parsec Void String String
+
 ftest :: Parsec Void String String
-ftest = chunk "abc" :: Parsec Void String String
+ftest = cuu
 
 main :: IO ()
 -- main = interact $ streamEdit (decimal :: Parsec Void String Int) (show . (*2))

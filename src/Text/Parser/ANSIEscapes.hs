@@ -16,7 +16,8 @@ Portability : POSIX
 
 Module to parse Google Takeout Location records as JSON and convert them to Location records
 -}
-module Internal.PatternsToStrip (
+module Text.Parser.ANSIEscapes (
+    ftest
     -- * Overview
     -- $overview
 
@@ -30,6 +31,12 @@ module Internal.PatternsToStrip (
 ) where
 
 import Relude
+
+-- import Data.Void
+import Text.Megaparsec
+import Text.Megaparsec.Char
+import Text.Megaparsec.Char.Lexer
+import Replace.Megaparsec
 
 -- import Data.Location.Model
 --
@@ -112,3 +119,9 @@ import Relude
 -- {- $overview
 --  This module lets you convert Google Takeout Location records into Location values.
 -- -}
+
+
+
+ftest :: Parsec Void String String
+ftest = chunk "abc" :: Parsec Void String String
+
