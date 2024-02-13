@@ -25,17 +25,22 @@ import Replace.Megaparsec
 
 import Prelude (interact)
 
--- csi :: ParsecT Void String String
-csi = chunk "\x1b["
+csi :: ParsecT Void String Identity String
+csi = string "\x1b["
+-- csi = pure <$> single '\x1b' <*> single '['
 
-cuu :: ParsecT Void String String
--- cuu = csi <*> MT.some digitChar <*> chunk "A" 
-cuu = chunk "\x1b[" <*> (MT.some digitChar) <*> chunk "A" 
+cuu :: ParsecT Void String Identity String
+cuu = csi <> MT.some digitChar <> chunk "A"
+-- cuu = chunk "\x1b[" <> MT.many digitChar <> chunk "A" 
 
--- test = csi <*> MT.some digitChar <*> oneOf "ABCDEFG"
 
--- ftest :: ParsecT Void String String
-ftest = cuu
+ftest :: ParsecT Void String Identity String
+-- ftest = pure  <$> csi <*> MT.some digitChar <*> oneOf "ABCDEFG"
+-- ftest = pure  <$> (MT.some digitChar) <*> oneOf "ABCDEFG"::String
+-- ftest = pure  <$> oneOf "ABCDEFG"::String
+-- ftest = pure  <$> (MT.some digitChar) 
+ftest = csi <> (MT.some digitChar) <*> oneOf "ABCDEFG"::String
+
 
 main :: IO ()
 -- main = interact $ streamEdit (decimal :: Parsec Void String Int) (show . (*2))
